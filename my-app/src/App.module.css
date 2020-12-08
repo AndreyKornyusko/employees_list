@@ -1,0 +1,16 @@
+.App {
+  padding-top: 100px;
+  text-align: center;
+}
+
+.tableWrap{
+  width: 900px;
+  margin: 0 auto;
+}
+
+.buttonWrap{
+  display: flex;
+  width: 450px;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}

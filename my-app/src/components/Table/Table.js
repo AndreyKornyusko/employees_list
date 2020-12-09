@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Table.module.css';
 
-const Table = ({ items }) => (
+const Table = ({ items, checked, handleInputChange }) => (
   <table className={styles.table}>
     <thead >
       <tr>
@@ -45,7 +45,13 @@ const Table = ({ items }) => (
             key={id + phone}
           >
             <td><div>
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                name={id}
+                id={id}
+                checked={checked}
+                onChange={handleInputChange} />
+
             </div></td>
             <td>{id}</td>
             <td>{fullName}</td>

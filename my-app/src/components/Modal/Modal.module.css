@@ -1,4 +1,4 @@
-.backdrop {
+.modalbackdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,6 +12,12 @@
 }
 
 .modalWrap {
+  width: 500px;
+  height: 400px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  margin: 0 auto;
  box-shadow: 0 0 10px rgba(0,0,0,0.5) ;
   background-color: #fff;
 }
+

@@ -1,5 +1,6 @@
 import React, { Component, createRef } from 'react';
 import styles from './Modal.module.css';
+import Form from '../Form/Form';
 
 export default class Modal extends Component {
   backdropRef = createRef();
@@ -22,8 +23,18 @@ export default class Modal extends Component {
   };
 
   render() {
-    const { children,
-      //  modalbackdrop, modalWrap
+    const {
+      children,
+      formTitle,
+      handleSubmit,
+      handleChange,
+      handleCancelClick,
+      fullName,
+      role,
+      businessLocation,
+      email,
+      phone,
+      hourlyRate,
     } = this.props;
     return (
       <div
@@ -31,7 +42,22 @@ export default class Modal extends Component {
         ref={this.backdropRef}
         onClick={this.handleBackdropClick}
       >
-        <div className={styles.modalWrap}>{children}</div>
+        <div className={styles.modalWrap}>
+          <h2 className={styles.formTitle}>{formTitle}</h2>
+          {/* {children} */}
+          <Form
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            handleCancelClick={handleCancelClick}
+            fullName={fullName}
+            role={role}
+            businessLocation={businessLocation}
+            email={email}
+            phone={phone}
+            hourlyRate={hourlyRate}
+          />
+
+        </div>
       </div>
     );
   }

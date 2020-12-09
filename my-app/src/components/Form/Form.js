@@ -12,7 +12,7 @@ export default class Form extends Component {
       businessLocation,
       email,
       phone,
-      hourlyRate
+      hourlyRate,
     } = this.props;
     return (
       <div className={styles.wrapper}>
@@ -60,7 +60,7 @@ export default class Form extends Component {
               placeholder="Hourly rate"
               onChange={handleChange} />
 
-            <input type="submit" value="Add" />
+            <input type="submit" value="Add"/>
 
           </div>
           <div className={styles.buttonWrap}>

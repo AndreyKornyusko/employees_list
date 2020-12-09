@@ -10,14 +10,15 @@
   margin-bottom: 20px;
 }
 
-input {
+.formWrap input {
   display: block;
   width: 300px;
   height: 30px;
   margin-bottom: 20px;
 }
 
-input[type="submit"]{
+.formWrap input[type="submit"]{
   display: block;
-  margin: 0;
+  margin: 0 auto;
+  background-color: rgb(74, 100, 247);
 }

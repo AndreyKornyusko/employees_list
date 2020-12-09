@@ -53,7 +53,7 @@ class App extends Component {
       phone,
       hourlyRate
     });
-    this.setState({items:updatedItems})
+    // this.setState({items:updatedItems})
     this.closeAddBtnModal()
   }
 

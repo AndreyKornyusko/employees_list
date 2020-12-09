@@ -12,8 +12,19 @@ class App extends Component {
   state = {
     items: items,
     checkedItems: [],
+    itemForEdit: {},
+    // itemForEdit: {
+    //   id: "",
+    //   fullName: "",
+    //   role: "",
+    //   businessLocation: "",
+    //   email: "",
+    //   phone: "",
+    //   hourlyRate: "",
+    // },
     isNewEmployerModalOpen: false,
     isEditEmployerModalOpen: false,
+    id: "",
     fullName: "",
     role: "",
     businessLocation: "",
@@ -21,7 +32,7 @@ class App extends Component {
     phone: "",
     hourlyRate: "",
     formTitle: "",
-    disabled: false
+    disabled: true,
   }
 
   handleAddBtn = () => {
@@ -36,29 +47,60 @@ class App extends Component {
     this.setState({ isNewEmployerModalOpen: false })
   }
 
+  closeEditBtnModal = () => {
+    this.setState({ isEditEmployerModalOpen: false })
+  }
+
   handleEditBtn = () => {
-    if (this.state.checkedItems.length > 1) {
+    if (this.state.checkedItems.length === 1 || this.state.checkedItems.length > 1) {
       this.setState({
+        isEditEmployerModalOpen: false,
         disabled: true
       })
     }
-    
+
     if (this.state.checkedItems.length === 1) {
+
+      const itemId = Number(this.state.checkedItems[0]);
+      const checkedItem = items.find(arrItem => (arrItem.id === itemId));
+      const itemForEdit = {
+        id: checkedItem.id,
+        fullName: checkedItem.fullName,
+        role: checkedItem.role,
+        businessLocation: checkedItem.businessLocation,
+        email: checkedItem.email,
+        phone: checkedItem.phone,
+        hourlyRate: checkedItem.hourlyRate,
+      }
+      // console.log("itemId", itemId)
+      // console.log("checkedItem", checkedItem)
+
       this.setState({
         isEditEmployerModalOpen: true,
         formTitle: "Edit employer",
-        disabled: false
+        disabled: false,
+        // itemForEdit: checkedItem
+        id: checkedItem.id,
+        fullName: checkedItem.fullName,
+        role: checkedItem.role,
+        businessLocation: checkedItem.businessLocation,
+        email: checkedItem.email,
+        phone: checkedItem.phone,
+        hourlyRate: checkedItem.hourlyRate,
+        itemForEdit: itemForEdit
+
       })
 
     }
-    this.setState({
-      isEditEmployerModalOpen: true,
-      formTitle: "Edit employer"
-    })
+
   }
 
   handleCancelClick = () => {
     this.closeAddBtnModal()
+  }
+
+  handleCancelEditBtnClick = () => {
+    this.closeEditBtnModal()
   }
 
   handleSubmit = (e) => {
@@ -85,6 +127,18 @@ class App extends Component {
     this.closeAddBtnModal()
   }
 
+  handleEditFormSubmit = (e) => {
+    e.preventDefault();
+    const editedItem = this.state.itemForEdit;
+    const id = Number(this.state.itemForEdit.id);
+    console.log(this.state);
+    const items = this.state.items;
+    const index = items.indexOf(id);
+    items.splice(index, 1, editedItem);
+    this.setState({ items: items })
+    this.closeEditBtnModal()
+  }
+
   handleChange = (e) => {
     const target = e.target;
     const value = target.value;
@@ -100,24 +154,45 @@ class App extends Component {
     const checked = target.checked;
     const checkId = target.id;
     // const checkedInputData= {checkId, checked}
-    const checkedItems = this.state.checkedItems;
-    checkedItems.push(checkId);
-    this.setState({
-      checkedItems: checkedItems,
-      disabled: false
-    });
+    const newCheckedItems = this.state.checkedItems;
+
+    if (newCheckedItems.includes(checkId)) {
+
+      const index = newCheckedItems.indexOf(checkId);
+
+      console.log("index", index);
+      console.log("checkId", checkId);
+      newCheckedItems.splice(index, 1);
+
+      console.log('newCheckedItems', newCheckedItems)
+
+      this.setState({
+        checkedItems: newCheckedItems,
+      });
+    }
+
+    if (!newCheckedItems.includes(checkId)) {
+      newCheckedItems.push(checkId);
+      this.setState({
+        checkedItems: newCheckedItems,
+        disabled: false
+      });
+    }
+
     if (this.state.checkedItems.length > 1) {
       this.setState({
         disabled: true
       });
     }
-    // console.log('checkedItems', this.state.checkedItems)
+    console.log('this.state.checkedItems', this.state.checkedItems)
+
   }
 
   render() {
     const {
       isNewEmployerModalOpen,
       isEditEmployerModalOpen,
+      id,
       fullName,
       role,
       businessLocation,
@@ -127,8 +202,16 @@ class App extends Component {
       items,
       formTitle,
       disabled
-
     } = this.state;
+
+    // const {
+    //   fullName,
+    //   role,
+    //   businessLocation,
+    //   email,
+    //   phone,
+    //   hourlyRate,
+    // } = this.state.itemForEdit
 
     return (
       <div className={styles.App}>
@@ -157,22 +240,16 @@ class App extends Component {
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
             handleCancelClick={this.handleCancelClick}
-            fullName={fullName}
-            role={role}
-            businessLocation={businessLocation}
-            email={email}
-            phone={phone}
-            hourlyRate={hourlyRate}
           >
           </Modal>
         }
         {isEditEmployerModalOpen &&
           <Modal
-            onClose={this.closeAddBtnModal}
+            onClose={this.closeEditBtnModal}
             formTitle={formTitle}
-            handleSubmit={this.handleSubmit}
+            handleSubmit={this.handleEditFormSubmit}
             handleChange={this.handleChange}
-            handleCancelClick={this.handleCancelClick}
+            handleCancelClick={this.handleCancelEditBtnClick}
             fullName={fullName}
             role={role}
             businessLocation={businessLocation}

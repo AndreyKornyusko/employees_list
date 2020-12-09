@@ -3,14 +3,56 @@
   text-align: center;
 }
 
-.tableWrap{
+.tableWrap {
   width: 900px;
   margin: 0 auto;
 }
 
-.buttonWrap{
+.buttonWrap {
   display: flex;
   width: 450px;
   justify-content: space-between;
   flex-wrap: nowrap;
+}
+
+.addBtn {
+  width: 130px;
+  height: 30px;
+  color: #fff;
+  background-color: rgb(25, 45, 230);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.addBtn:hover{
+  background-color: rgb(135, 145, 235);
+}
+
+.editBtn {
+  width: 80px;
+  height: 30px;
+  color: rgb(25, 45, 230);
+  background-color: #fff;
+  border: 1px solid rgb(25, 45, 230);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.editBtn:hover{
+  background-color: rgb(223, 217, 219);
+}
+
+.deleteBtn {
+  width: 80px;
+  height: 30px;
+  color: rgb(247, 83, 146);
+  background-color: #fff;
+  border: 1px solid rgb(247, 83, 146);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.deleteBtn:hover{
+  background-color: rgb(218, 211, 213);
 }

@@ -25,7 +25,7 @@
   cursor: pointer;
 }
 
-.addBtn:hover{
+.addBtn:hover {
   background-color: rgb(135, 145, 235);
 }
 
@@ -34,13 +34,18 @@
   height: 30px;
   color: rgb(25, 45, 230);
   background-color: #fff;
-  border: 1px solid rgb(25, 45, 230);
+  border: 2px solid rgb(25, 45, 230);
   border-radius: 3px;
   cursor: pointer;
 }
 
-.editBtn:hover{
+.editBtn:hover {
   background-color: rgb(223, 217, 219);
+}
+
+.editBtn:disabled {
+  color: rgb(131, 141, 231);
+  border: 2px solid rgb(131, 141, 231);
 }
 
 .deleteBtn {
@@ -48,11 +53,11 @@
   height: 30px;
   color: rgb(247, 83, 146);
   background-color: #fff;
-  border: 1px solid rgb(247, 83, 146);
+  border: 2px solid rgb(247, 83, 146);
   border-radius: 3px;
   cursor: pointer;
 }
 
-.deleteBtn:hover{
+.deleteBtn:hover {
   background-color: rgb(218, 211, 213);
 }

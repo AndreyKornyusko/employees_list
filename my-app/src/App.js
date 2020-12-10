@@ -2,15 +2,17 @@ import React, { Component } from 'react'
 import styles from './App.module.css';
 import Table from '../src/components/Table/Table';
 import Modal from '../src/components/Modal/Modal';
+import * as API from '../src/services/api';
 
-const items = [
-  { id: 101, fullName: "John Wick", role: "hunter", businessLocation: "New York", email: "johnwick@gmail.com", phone: "455-44-41", hourlyRate: "2000/h" },
-  { id: 102, fullName: "John Wick", role: "killer", businessLocation: "New York", email: "johnwick@gmail.com", phone: "455-44-41", hourlyRate: "4000/h" },
-  { id: 103, fullName: "John Wick", role: "hunter", businessLocation: "Chicago", email: "johnwick@gmail.com", phone: "455-44-41", hourlyRate: "3000/h" }]
+// const items = [
+//   { id: 101, fullName: "John Wick", role: "hunter", businessLocation: "New York", email: "johnwick@gmail.com", phone: "455-44-41", hourlyRate: "2000/h" },
+//   { id: 102, fullName: "John Wick", role: "killer", businessLocation: "New York", email: "johnwick@gmail.com", phone: "455-44-41", hourlyRate: "4000/h" },
+//   { id: 103, fullName: "John Wick", role: "hunter", businessLocation: "Chicago", email: "johnwick@gmail.com", phone: "455-44-41", hourlyRate: "3000/h" }
+// ]
 
 class App extends Component {
   state = {
-    items: items,
+    items: [],
     checkedItems: [],
     itemForEdit: {},
     // itemForEdit: {
@@ -33,6 +35,12 @@ class App extends Component {
     hourlyRate: "",
     formTitle: "",
     disabled: true,
+  }
+
+  componentDidMount() {
+    API.getAllItems().then(items => {
+      this.setState({ items });
+    });
   }
 
   handleAddBtn = () => {
@@ -62,7 +70,7 @@ class App extends Component {
     if (this.state.checkedItems.length === 1) {
 
       const itemId = Number(this.state.checkedItems[0]);
-      const checkedItem = items.find(arrItem => (arrItem.id === itemId));
+      const checkedItem = this.state.items.find(arrItem => (arrItem.id === itemId));
       const itemForEdit = {
         id: checkedItem.id,
         fullName: checkedItem.fullName,
@@ -112,31 +120,98 @@ class App extends Component {
       phone,
       hourlyRate } = this.state;
     const id = Date.now()
-    console.log(this.state);
-    const items = this.state.items;
-    items.push({
+    const newItem = {
       id, fullName,
       role,
       businessLocation,
       email,
       phone,
       hourlyRate
-    });
+    }
 
-    this.setState({ items: items })
+    API.addItem(newItem).then(response => {
+      console.log("response", response)
+      if (response.status === 201) return response.data;
+      return
+    })
+      .then(newItem =>
+        this.setState(state => ({ items: [...state.items, newItem] }))
+      );
+
     this.closeAddBtnModal()
   }
 
   handleEditFormSubmit = (e) => {
     e.preventDefault();
-    const editedItem = this.state.itemForEdit;
-    const id = Number(this.state.itemForEdit.id);
-    console.log(this.state);
+    console.log("Клик на сабмит модалки редактирования");
+    const checkedItems = this.state.checkedItems;
+    const id = Number(checkedItems[0]);
+    console.log("id", id)
     const items = this.state.items;
-    const index = items.indexOf(id);
-    items.splice(index, 1, editedItem);
-    this.setState({ items: items })
+    const {
+      fullName,
+      role,
+      businessLocation,
+      email,
+      phone,
+      hourlyRate,
+    } = this.state;
+
+    const editedItem = {
+      id,
+      fullName,
+      role,
+      businessLocation,
+      email,
+      phone,
+      hourlyRate
+    }
+
+    console.log("editedItem", editedItem)
+
+    items.forEach((item, i) => {
+      console.log("item.id", item.id);
+      console.log("editedItem.id", editedItem.id);
+
+      if (item.id === editedItem.id) {
+        items[i] = editedItem
+      }
+    })
+
+    console.log("items", items)
+
+    this.setState({ items: items });
+    console.log("this.state", this.state)
     this.closeEditBtnModal()
+  }
+
+  handleDeleteBtn = () => {
+    console.log("Клик на Delete");
+    if (this.state.checkedItems.length > 0) {
+      const items = this.state.items;
+      const checkedItems = this.state.checkedItems;
+      const newItems = items.filter(item => !checkedItems.includes(item.id));
+
+      checkedItems.forEach(
+        item => {
+          console.log("delete item", item)
+          API.deleteItem(item).then(response => {
+            console.log("delete response", response)
+            if (response.status === 200) {
+              // this.setState(state => ({
+              //   items: state.items.filter(arrItem => arrItem.id !== item),
+              // }));
+            }
+          })
+        }
+      )
+
+      this.setState({
+        items: newItems,
+      });
+
+    }
+    return
   }
 
   handleChange = (e) => {
@@ -156,12 +231,12 @@ class App extends Component {
     // const checkedInputData= {checkId, checked}
     const newCheckedItems = this.state.checkedItems;
 
-    if (newCheckedItems.includes(checkId)) {
+    if (newCheckedItems.includes(Number(checkId))) {
 
-      const index = newCheckedItems.indexOf(checkId);
+      const index = newCheckedItems.indexOf(Number(checkId));
 
       console.log("index", index);
-      console.log("checkId", checkId);
+      console.log("checkId", Number(checkId));
       newCheckedItems.splice(index, 1);
 
       console.log('newCheckedItems', newCheckedItems)
@@ -171,8 +246,8 @@ class App extends Component {
       });
     }
 
-    if (!newCheckedItems.includes(checkId)) {
-      newCheckedItems.push(checkId);
+    if (!newCheckedItems.includes(Number(checkId))) {
+      newCheckedItems.push(Number(checkId));
       this.setState({
         checkedItems: newCheckedItems,
         disabled: false
@@ -230,7 +305,10 @@ class App extends Component {
               onClick={this.handleEditBtn}
               disabled={disabled}
             >Edit</button>
-            <button className={styles.deleteBtn}>Delete</button>
+            <button
+              className={styles.deleteBtn}
+              onClick={this.handleDeleteBtn}
+            >Delete</button>
           </div>
         </div>
         {isNewEmployerModalOpen &&

@@ -24,7 +24,6 @@ export default class Modal extends Component {
 
   render() {
     const {
-      children,
       formTitle,
       handleSubmit,
       handleChange,

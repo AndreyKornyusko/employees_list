@@ -14,16 +14,7 @@ class App extends Component {
   state = {
     items: [],
     checkedItems: [],
-    itemForEdit: {},
-    // itemForEdit: {
-    //   id: "",
-    //   fullName: "",
-    //   role: "",
-    //   businessLocation: "",
-    //   email: "",
-    //   phone: "",
-    //   hourlyRate: "",
-    // },
+    // itemForEdit: {},
     isNewEmployerModalOpen: false,
     isEditEmployerModalOpen: false,
     id: "",
@@ -146,7 +137,7 @@ class App extends Component {
     console.log("Клик на сабмит модалки редактирования");
     const checkedItems = this.state.checkedItems;
     const id = Number(checkedItems[0]);
-    console.log("id", id)
+    // console.log("id", id)
     const items = this.state.items;
     const {
       fullName,
@@ -167,21 +158,24 @@ class App extends Component {
       hourlyRate
     }
 
-    console.log("editedItem", editedItem)
+    // console.log("editedItem", editedItem)
 
     items.forEach((item, i) => {
-      console.log("item.id", item.id);
-      console.log("editedItem.id", editedItem.id);
+      // console.log("item.id", item.id);
+      // console.log("editedItem.id", editedItem.id);
 
       if (item.id === editedItem.id) {
         items[i] = editedItem
       }
     })
-
-    console.log("items", items)
-
-    this.setState({ items: items });
-    console.log("this.state", this.state)
+    // console.log("items", items)
+    API.changeItem(editedItem.id, editedItem).then(response => {
+      console.log("response", response)
+      if (response.status === 200) {
+        this.setState({ items: items });
+      };
+    })
+    // console.log("this.state", this.state)
     this.closeEditBtnModal()
   }
 
@@ -226,24 +220,28 @@ class App extends Component {
 
   handleCheckInputChange = (e) => {
     const target = e.target;
-    const checked = target.checked;
     const checkId = target.id;
-    // const checkedInputData= {checkId, checked}
     const newCheckedItems = this.state.checkedItems;
 
     if (newCheckedItems.includes(Number(checkId))) {
-
       const index = newCheckedItems.indexOf(Number(checkId));
-
-      console.log("index", index);
-      console.log("checkId", Number(checkId));
       newCheckedItems.splice(index, 1);
-
-      console.log('newCheckedItems', newCheckedItems)
-
       this.setState({
         checkedItems: newCheckedItems,
       });
+
+      if (newCheckedItems.length > 1) {
+        this.setState({
+          disabled: true
+        });
+      }
+
+      if (newCheckedItems.length === 1) {
+        this.setState({
+          disabled: false
+        });
+      }
+      return
     }
 
     if (!newCheckedItems.includes(Number(checkId))) {
@@ -252,22 +250,19 @@ class App extends Component {
         checkedItems: newCheckedItems,
         disabled: false
       });
+      if (newCheckedItems.length > 1) {
+        this.setState({
+          disabled: true
+        });
+      }
     }
-
-    if (this.state.checkedItems.length > 1) {
-      this.setState({
-        disabled: true
-      });
-    }
-    console.log('this.state.checkedItems', this.state.checkedItems)
-
+    // console.log('this.state.checkedItems', this.state.checkedItems)
   }
 
   render() {
     const {
       isNewEmployerModalOpen,
       isEditEmployerModalOpen,
-      id,
       fullName,
       role,
       businessLocation,
@@ -279,14 +274,6 @@ class App extends Component {
       disabled
     } = this.state;
 
-    // const {
-    //   fullName,
-    //   role,
-    //   businessLocation,
-    //   email,
-    //   phone,
-    //   hourlyRate,
-    // } = this.state.itemForEdit
 
     return (
       <div className={styles.App}>

@@ -13,5 +13,8 @@ const addItem = item =>
 const deleteItem = id =>
   axios.delete(`/items/${id}`).then(response => response);
 
+  const changeItem = (id, item) =>
+  axios.put(`/items/${id}`,item).then(response => response);
 
-export { getAllItems, addItem, deleteItem };
+
+export { getAllItems, addItem, deleteItem, changeItem };

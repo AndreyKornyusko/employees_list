@@ -29,7 +29,7 @@ export default class Modal extends Component {
       handleChange,
       handleCancelClick,
       fullName,
-      role,
+      role, 
       businessLocation,
       email,
       phone,

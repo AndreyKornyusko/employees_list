@@ -2,7 +2,10 @@ import axios from 'axios';
 
 // axios.defaults.baseURL = 'https://json-server-258905.appspot.com/categories';
 
-axios.defaults.baseURL = 'http://localhost:3002';
+// axios.defaults.baseURL = 'http://localhost:3002';
+// axios.defaults.baseURL = 'https://my-cool-projectapi.herokuapp.com/';
+
+axios.defaults.baseURL = 'https://food-shop-auth-api.herokuapp.com/';
 
 const getAllItems = () =>
   axios.get('/items').then(response => response.data);
